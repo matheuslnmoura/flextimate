@@ -1,0 +1,372 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  birthday DateTime
+  createdAt DateTime @default(now())
+  isActive Boolean @default(true)
+  layOffDate DateTime? 
+  employeeBranches EmployeeBranches[]
+  role Role @relation(fields: [roleId], references: [id])
+  roleId Int
+  area Area @relation(fields: [areaId], references: [id])
+  areaId Int
+
+  @@map("employees")
+}
+
+model Role {
+  id Int @id @default(autoincrement())
+  name String
+  employee Employee[]
+
+  @@map("roles")
+}
+
+model Area {
+  id Int @id @default(autoincrement())
+  name String
+  employee Employee[]
+}
+
+model Branch {
+  id Int @id @default(autoincrement())
+  name String
+  currency String
+  measurement String
+  employeeBranches EmployeeBranches[]
+  film Film[]
+  profile Profile[]
+  lightSource LightSource[]
+  powerSupply PowerSupply[]
+  amplifier Amplifier[]
+  accessory Accessory[]
+  aditionalMaterials AditionalMaterials[]
+  project Project[]
+  installationCosts InstallationCosts[]
+
+  @@map("branches")
+}
+
+model EmployeeBranches {
+  id Int @id @default(autoincrement())
+  employee Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+
+  @@map("employee_branches")
+}
+
+model Film {
+  id Int @id @default(autoincrement())
+  name String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  rawCost Int
+  manufacturedCost Int
+  salesPrice Int
+  dealerPrice Int
+
+  projectMaterial ProjectMaterial[]
+
+  @@map("films")
+}
+
+model Profile {
+  id Int @id @default(autoincrement())
+  name String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  rawCost Int
+  manufacturedCost Int
+  salesPrice Int
+  dealerPrice Int
+
+  projectMaterial ProjectMaterial[]
+
+  @@map("profiles")
+}
+
+model LightSource {
+  id Int @id @default(autoincrement())
+  supplier String
+  manufacturer String
+  name String
+  type String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  volts String
+  lumensPerMeter Int
+  wattsPerMeter Int
+  ampsPerMeter Int
+  protection String
+  metersPerRoll Int
+  rollCost Int
+  meterCost Int
+  salesPrice Int?
+  dealerPrice Int?
+
+  projectMaterial ProjectMaterial[]
+
+  @@map("light_sources")
+}
+
+model PowerSupply {
+  id Int @id @default(autoincrement())
+  supplier String
+  manufacturer String
+  name String
+  type String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  volts String
+  watts Int
+  amps Int
+  protection String
+  cost Int
+  salesPrice Int?
+  dealerPrice Int?
+
+  projectMaterial ProjectMaterial[]
+  
+  @@map("power_supplies")
+}
+
+model Amplifier {
+  id Int @id @default(autoincrement())
+  supplier String
+  manufacturer String
+  name String
+  type String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  volts String
+  watts Int
+  amps Int
+  protection String
+  cost Int
+  salesPrice Int?
+  dealerPrice Int?
+
+  projectMaterial ProjectMaterial[]
+  
+  @@map("amplifiers")
+}
+
+model Accessory {
+  id Int @id @default(autoincrement())
+  supplier String
+  manufacturer String
+  name String
+  type String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  cost Int
+  salesPrice Int?
+  dealerPrice Int?
+
+  projectMaterial ProjectMaterial[]
+  
+  @@map("accessories")
+}
+
+model AditionalMaterials {
+  id Int @id @default(autoincrement())
+  supplier String
+  name String
+  type String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  cost Int
+  salesPrice Int?
+  dealerPrice Int?
+
+  projectMaterial ProjectMaterial[]
+  
+  @@map("aditional_materials")
+}
+
+model InstallationCosts {
+  id Int @id @default(autoincrement())
+  name String
+  type String
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+  cost Int
+  salesPrice Int?
+  dealerPrice Int?
+
+  projectInstallation ProjectInstallation[]
+  
+  @@map("installation_costs")
+}
+
+model Project {
+  id Int @id @default(autoincrement())
+  code String
+  name String
+  client String
+  information String
+  description String?
+
+  branch Branch @relation(fields: [branchId], references: [id])
+  branchId Int
+
+  address String
+
+  city City @relation(fields: [cityId], references: [id])
+  cityId Int
+
+  totalCost Int?
+  salePrice Int?
+
+  status Status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  specifier Specifier? @relation(fields: [specifierId], references: [id])  
+  specifierId Int?
+
+  dealer Dealer? @relation(fields: [dealerId], references: [id])  
+  dealerId Int?
+
+  projectMaterial ProjectMaterial[]
+
+
+  @@map("projects")
+}
+
+model ProjectMaterial {
+  id Int @id @default(autoincrement())
+
+  project Project @relation(fields: [projectId], references: [id])  
+  projectId Int
+
+  film Film @relation(fields: [filmId], references: [id])  
+  filmId Int
+  filmQuantity Int
+
+  profile Profile @relation(fields: [profileId], references: [id])  
+  profileId Int
+  profileQuantity Int
+
+  lightSource LightSource @relation(fields: [lightSourceId], references: [id])  
+  lightSourceId Int
+  lightSourceQuantity Int
+
+  powerSupply PowerSupply @relation(fields: [powerSupplyId], references: [id])  
+  powerSupplyId Int
+  powerSupplyQuantity Int
+
+  amplifier Amplifier @relation(fields: [amplifierId], references: [id])  
+  amplifierId Int
+  amplifierQuantity Int
+
+  accessory Accessory @relation(fields: [accessoryId], references: [id])  
+  accessoryId Int
+  accessoryQuantity Int
+
+  aditionalMaterial AditionalMaterials @relation(fields: [aditionalMaterialId], references: [id])  
+  aditionalMaterialId Int
+  aditionalMaterialQuantity Int
+
+  @@map("project_materials")
+}
+
+model ProjectInstallation {
+  id Int @id @default(autoincrement())
+
+  installationCost InstallationCosts @relation(fields: [installationCostId], references: [id])  
+  installationCostId Int
+  installationCostQuantity Int
+
+  @@map("project_installation")
+}
+
+model Status {
+  id Int @id @default(autoincrement())
+  name String @unique
+
+  project Project[]
+
+  @@map("status")
+}
+
+model Specifier {
+  id Int @id @default(autoincrement())
+  name String
+  email String?
+  phone String?
+  birthday DateTime?
+  comission Int
+  company String?
+
+  project Project[]  
+
+  @@map("specifiers")  
+}
+
+model Dealer {
+  id Int @id @default(autoincrement())
+  name String
+  email String?
+  phone String?
+  comission Int
+  assignedContact String?
+
+  project Project[]  
+
+  @@map("dealers")  
+}
+
+model City {
+  id Int @id @default(autoincrement())
+  name String
+
+  project Project[]
+
+  state State @relation(fields: [stateId], references: [id])
+  stateId Int
+    
+
+  @@map("cities") 
+}
+
+model State {
+  id Int @id @default(autoincrement())
+  name String
+
+  city City[]
+
+  country Country @relation(fields: [countryId], references: [id])
+  countryId Int
+    
+
+  @@map("states") 
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+  name String
+
+  state State[]
+    
+
+  @@map("countries") 
+}
