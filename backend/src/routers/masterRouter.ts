@@ -5,6 +5,6 @@ import employeeRouter from './employeeRouter.js';
 
 const router = Router();
 
-router.use(employeeRouter)
+router.use(employeeRouter);
 
 export default router;

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 function encryptPassword(password: string) {
@@ -22,6 +22,6 @@ const employeeUtils = {
   encryptPassword,
   validatePassword,
   createToken
-}
+};
 
-export default employeeUtils
+export default employeeUtils;
