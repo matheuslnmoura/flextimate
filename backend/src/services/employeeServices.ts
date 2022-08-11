@@ -32,7 +32,12 @@ async function signInService(signInInfo: employeeSignInData) {
   const {id, password: hashPassword} = user;
   employeeUtils.validatePassword(password, hashPassword);
   const token = await employeeUtils.createToken(id);
-  return token;
+  delete user.password;
+  delete user.layOffDate;
+  return {
+    token,
+    user
+  };
 }
 
 async function checkIfUserExists(email: string) {

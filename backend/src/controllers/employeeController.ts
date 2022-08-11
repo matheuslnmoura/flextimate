@@ -4,8 +4,8 @@ import employeeService from '../services/employeeServices.js';
 
 async function signInController( req: Request, res: Response) {
   const userInfo = req.body;
-  const token = await employeeService.signInService(userInfo);
-  res.status(200).send({token});
+  const response = await employeeService.signInService(userInfo);
+  res.status(200).send(response);
 }
 
 async function signUpController( req: Request, res: Response) {
