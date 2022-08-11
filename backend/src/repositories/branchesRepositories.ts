@@ -9,9 +9,14 @@ async function registerEmployeeToBranch(employeeId: number, branchId: number) {
   });
 }
 
+async function getAllBranchesIds() {
+  return await prisma.branch.findMany({});
+}
+
 
 const branchesRepository = {
-  registerEmployeeToBranch
+  registerEmployeeToBranch,
+  getAllBranchesIds
 };
 
 export default branchesRepository;

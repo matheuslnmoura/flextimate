@@ -78,8 +78,8 @@ model Film {
   branchId Int
   rawCost Int
   manufacturedCost Int
-  salesPrice Int
-  dealerPrice Int
+  salesPrice Int?
+  dealerPrice Int?
 
   projectMaterial ProjectMaterial[]
 
@@ -91,10 +91,10 @@ model Profile {
   name String
   branch Branch @relation(fields: [branchId], references: [id])
   branchId Int
-  rawCost Int
-  manufacturedCost Int
-  salesPrice Int
-  dealerPrice Int
+  rawCostPerMeter Int
+  rawCostPerKg Int
+  salesPrice Int?
+  dealerPrice Int?
 
   projectMaterial ProjectMaterial[]
 
@@ -112,7 +112,7 @@ model LightSource {
   volts String
   lumensPerMeter Int
   wattsPerMeter Int
-  ampsPerMeter Int
+  mAmpsPerMeter Int
   protection String
   metersPerRoll Int
   rollCost Int
@@ -135,7 +135,7 @@ model PowerSupply {
   branchId Int
   volts String
   watts Int
-  amps Int
+  mAmps Int
   protection String
   cost Int
   salesPrice Int?
@@ -155,8 +155,7 @@ model Amplifier {
   branch Branch @relation(fields: [branchId], references: [id])
   branchId Int
   volts String
-  watts Int
-  amps Int
+  mAmps Int
   protection String
   cost Int
   salesPrice Int?
@@ -235,7 +234,7 @@ model Project {
   salePrice Int?
 
   status Status @relation(fields: [statusId], references: [id])
-  statusId Int
+  statusId Int @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -247,6 +246,7 @@ model Project {
   dealerId Int?
 
   projectMaterial ProjectMaterial[]
+  projectInstallation ProjectInstallation[]
 
 
   @@map("projects")
@@ -266,25 +266,25 @@ model ProjectMaterial {
   profileId Int
   profileQuantity Int
 
-  lightSource LightSource @relation(fields: [lightSourceId], references: [id])  
-  lightSourceId Int
-  lightSourceQuantity Int
+  lightSource LightSource? @relation(fields: [lightSourceId], references: [id])  
+  lightSourceId Int?
+  lightSourceQuantity Int?
 
-  powerSupply PowerSupply @relation(fields: [powerSupplyId], references: [id])  
-  powerSupplyId Int
-  powerSupplyQuantity Int
+  powerSupply PowerSupply? @relation(fields: [powerSupplyId], references: [id])  
+  powerSupplyId Int?
+  powerSupplyQuantity Int?
 
-  amplifier Amplifier @relation(fields: [amplifierId], references: [id])  
-  amplifierId Int
-  amplifierQuantity Int
+  amplifier Amplifier? @relation(fields: [amplifierId], references: [id])  
+  amplifierId Int?
+  amplifierQuantity Int?
 
-  accessory Accessory @relation(fields: [accessoryId], references: [id])  
-  accessoryId Int
-  accessoryQuantity Int
+  accessory Accessory? @relation(fields: [accessoryId], references: [id])  
+  accessoryId Int?
+  accessoryQuantity Int?
 
-  aditionalMaterial AditionalMaterials @relation(fields: [aditionalMaterialId], references: [id])  
-  aditionalMaterialId Int
-  aditionalMaterialQuantity Int
+  aditionalMaterial AditionalMaterials? @relation(fields: [aditionalMaterialId], references: [id])  
+  aditionalMaterialId Int?
+  aditionalMaterialQuantity Int?
 
   @@map("project_materials")
 }
@@ -295,6 +295,9 @@ model ProjectInstallation {
   installationCost InstallationCosts @relation(fields: [installationCostId], references: [id])  
   installationCostId Int
   installationCostQuantity Int
+
+  project Project @relation(fields: [projectId], references: [id])  
+  projectId Int
 
   @@map("project_installation")
 }

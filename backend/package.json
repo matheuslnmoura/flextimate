@@ -8,7 +8,9 @@
     "dev": "nodemon src/server.ts",
     "dev:test": "dotenv -e .env.test prisma migrate dev && dotenv -e .env.test nodemon src/server.ts",
     "prisma-test": "dotenv -e .env.test prisma migrate reset --skip-seed",
-    "prisma-seed-users": "ts-node prisma/userSeed.ts"
+    "prisma-seed-dependencies": "ts-node prisma/dependenciesSeed.ts",
+    "prisma-seed-users": "ts-node prisma/userSeed.ts",
+    "prisma-seed-materials": "ts-node prisma/materialsSeed.ts"
   },
   "keywords": [],
   "author": "",
