@@ -24,6 +24,7 @@ model Employee {
   roleId Int
   area Area @relation(fields: [areaId], references: [id])
   areaId Int
+  assigned Project[]
 
   @@map("employees")
 }
@@ -244,6 +245,9 @@ model Project {
 
   dealer Dealer? @relation(fields: [dealerId], references: [id])  
   dealerId Int?
+
+  assigned Employee @relation(fields: [assignedId], references: [id])
+  assignedId Int
 
   projectMaterial ProjectMaterial[]
   projectInstallation ProjectInstallation[]
