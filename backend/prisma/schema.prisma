@@ -46,6 +46,7 @@ model Area {
 model Branch {
   id Int @id @default(autoincrement())
   name String
+  code String @default("BR")
   currency String
   measurement String
   employeeBranches EmployeeBranches[]
@@ -228,8 +229,8 @@ model Project {
 
   address String
 
-  city City @relation(fields: [cityId], references: [id])
-  cityId Int
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
 
   totalCost Int?
   salePrice Int?
@@ -342,38 +343,18 @@ model Dealer {
   @@map("dealers")  
 }
 
-model City {
+model Location {
   id Int @id @default(autoincrement())
-  name String
+  cityId Int
+  cityName String
+  stateId Int
+  stateCode String
+  stateName String
+  countryId Int
+  countryCode String
+  countryName String
 
   project Project[]
 
-  state State @relation(fields: [stateId], references: [id])
-  stateId Int
-    
-
-  @@map("cities") 
-}
-
-model State {
-  id Int @id @default(autoincrement())
-  name String
-
-  city City[]
-
-  country Country @relation(fields: [countryId], references: [id])
-  countryId Int
-    
-
-  @@map("states") 
-}
-
-model Country {
-  id Int @id @default(autoincrement())
-  name String
-
-  state State[]
-    
-
-  @@map("countries") 
+  @@map("locations") 
 }

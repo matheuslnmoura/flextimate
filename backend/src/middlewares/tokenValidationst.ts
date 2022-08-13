@@ -9,22 +9,42 @@ import { Employee } from '@prisma/client';
 dotenv.config();
 
 const tokenValidations = {
-  isAdmUser,
+  isAdmLvl,
+  isManagerLvl,
   validateEmployee
 };
 
 export default tokenValidations;
 
-async function isAdmUser(req: Request, res: Response, next: NextFunction){
+async function isAdmLvl(req: Request, res: Response, next: NextFunction){
   const { authorization } = req.headers;
 
   const user: Employee = await getUserByToken(authorization, res);
 
   if(user.roleId !== 1) {                       //isNotAdmin
-    throw{code: 401, message: 'Não é permitido registrar novos usuários com suas credenciais. Entre em contato com o seu Administrador.'};
+    throw{code: 401, message: 'Apenas funcionários com papel de Administrador podem realizar essa ação. Contate seu superior'};
   }
+
+  res.locals.user = user;
+
   next();
 }
+
+async function isManagerLvl(req: Request, res: Response, next: NextFunction){
+  const { authorization } = req.headers;
+
+  const user: Employee = await getUserByToken(authorization, res);
+
+  if(user.roleId >= 2) {                       //isNotAdminOrManager
+    throw{code: 401, message: 'Apenas funcionários com papel de Administrador ou Gerente podem realizar essa ação. Contate seu superior'};
+  }
+
+  res.locals.user = user;
+
+  next();
+}
+
+
 
 async function validateEmployee(req: Request, res: Response, next: NextFunction) {
   const { authorization } = req.headers;

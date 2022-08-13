@@ -13,10 +13,19 @@ async function getAllBranchesIds() {
   return await prisma.branch.findMany({});
 }
 
+async function getBranchById(id:number) {
+  return await prisma.branch.findUnique({
+    where:{
+      id
+    }
+  });
+}
+
 
 const branchesRepository = {
   registerEmployeeToBranch,
-  getAllBranchesIds
+  getAllBranchesIds,
+  getBranchById
 };
 
 export default branchesRepository;
