@@ -83,7 +83,7 @@ model Film {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryFilm LuminaryFilm[]
 
   @@map("films")
 }
@@ -98,7 +98,7 @@ model Profile {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryProfile LuminaryProfile[]
 
   @@map("profiles")
 }
@@ -122,7 +122,7 @@ model LightSource {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryLightSource LuminaryLightSource[]
 
   @@map("light_sources")
 }
@@ -143,8 +143,9 @@ model PowerSupply {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
-  
+  luminarypowerSupply LuminaryPowerSupply[]
+
+
   @@map("power_supplies")
 }
 
@@ -163,8 +164,8 @@ model Amplifier {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
-  
+  luminaryAmplifier LuminaryAmplifier[]
+
   @@map("amplifiers")
 }
 
@@ -180,7 +181,7 @@ model Accessory {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryAccessory LuminaryAccessory[]
   
   @@map("accessories")
 }
@@ -196,7 +197,7 @@ model AditionalMaterials {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryAditionalMaterial LuminaryAditionalMaterial[]
   
   @@map("aditional_materials")
 }
@@ -250,48 +251,122 @@ model Project {
   assigned Employee @relation(fields: [assignedId], references: [id])
   assignedId Int
 
-  projectMaterial ProjectMaterial[]
+  luminary Luminary[]
   projectInstallation ProjectInstallation[]
+
 
 
   @@map("projects")
 }
 
-model ProjectMaterial {
+model Luminary {
   id Int @id @default(autoincrement())
+
+  description String
+  quantity Int
 
   project Project @relation(fields: [projectId], references: [id])  
   projectId Int
 
+  luminaryFilm LuminaryFilm[]
+  luminaryProfile LuminaryProfile[]
+  luminaryLightSource LuminaryLightSource[]
+  luminarypowerSupply LuminaryPowerSupply[]
+  luminaryAmplifier LuminaryAmplifier[]
+  luminaryAccessory LuminaryAccessory[]
+  luminaryAditionalMaterial LuminaryAditionalMaterial[]
+
+}
+
+model LuminaryFilm {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
   film Film @relation(fields: [filmId], references: [id])  
   filmId Int
-  filmQuantity Int
+  filmQuantity Float
+
+  @@map("luminary_film")
+}
+
+model LuminaryProfile {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
 
   profile Profile @relation(fields: [profileId], references: [id])  
   profileId Int
-  profileQuantity Int
+  profileQuantity Float
 
-  lightSource LightSource? @relation(fields: [lightSourceId], references: [id])  
-  lightSourceId Int?
-  lightSourceQuantity Int?
+  @@map("luminary_profile")
+}
 
-  powerSupply PowerSupply? @relation(fields: [powerSupplyId], references: [id])  
-  powerSupplyId Int?
-  powerSupplyQuantity Int?
+model LuminaryLightSource {
+  id Int @id @default(autoincrement())
 
-  amplifier Amplifier? @relation(fields: [amplifierId], references: [id])  
-  amplifierId Int?
-  amplifierQuantity Int?
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
 
-  accessory Accessory? @relation(fields: [accessoryId], references: [id])  
-  accessoryId Int?
-  accessoryQuantity Int?
+  lightSource LightSource @relation(fields: [lightSourceId], references: [id])  
+  lightSourceId Int
+  lightSourceQuantity Float
 
-  aditionalMaterial AditionalMaterials? @relation(fields: [aditionalMaterialId], references: [id])  
-  aditionalMaterialId Int?
-  aditionalMaterialQuantity Int?
+  @@map("luminary_light_source")
+}
 
-  @@map("project_materials")
+model LuminaryPowerSupply {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
+  powerSupply PowerSupply @relation(fields: [powerSupplyId], references: [id])  
+  powerSupplyId Int
+  powerSupplyQuantity Int
+
+  @@map("luminary_power_supply")
+}
+
+model LuminaryAmplifier {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
+  amplifier Amplifier @relation(fields: [amplifierId], references: [id])  
+  amplifierId Int
+  amplifierQuantity Int
+
+  @@map("luminary_amplifier")
+}
+
+model LuminaryAccessory {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
+  accessory Accessory @relation(fields: [accessoryId], references: [id])  
+  accessoryId Int
+  accessoryQuantity Int
+
+  @@map("luminary_accessory")
+}
+
+model LuminaryAditionalMaterial {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
+  aditionalMaterial AditionalMaterials @relation(fields: [aditionalMaterialId], references: [id])  
+  aditionalMaterialId Int
+  aditionalMaterialQuantity Float
+
+  @@map("luminary_aditional_material")
 }
 
 model ProjectInstallation {

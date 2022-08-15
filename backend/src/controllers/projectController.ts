@@ -4,7 +4,8 @@ import projectService from '../services/projectServices.js';
 const projectController = {
   createProject,
   getProjects,
-  getProjectsByStatus
+  getProjectsByStatus,
+  getProjectById
 };
 
 export default projectController;
@@ -25,4 +26,10 @@ async function getProjectsByStatus(req: Request, res: Response) {
   const {status} = req.params;
   const projects = await projectService.getByStatus(parseInt(status));
   res.status(200).send(projects);
+}
+
+async function getProjectById(req: Request, res: Response) {
+  const projectId = parseInt(req.params.id);
+  const project = await projectService.getProjectById(projectId);
+  res.status(200).send(project);
 }

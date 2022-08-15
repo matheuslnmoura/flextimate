@@ -31,7 +31,7 @@ const projectService = {
   create,
   getAll,
   getByStatus,
-
+  getProjectById
 };
 
 export default projectService;
@@ -65,6 +65,11 @@ async function create(projectInfo: createProjectInputData, employeeInfo: Employe
     throw {code: 500, message: 'Não foi possível criar o projeto. Revise seus dados.'};
   }
 
+  return project;
+}
+
+async function getProjectById(id: number) {
+  const project = await projectRepository.getById(id);
   return project;
 }
 

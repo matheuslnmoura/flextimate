@@ -3,11 +3,13 @@ import prisma from '../config/database.js';
 
 const projectRepository = {
   getAll,
+  getById,
   getAllByCode,
   getByBranch,
   getByBranchAndCity,
   getByDealer,
   getByStatus,
+  updateStatus,
   create
 };
 
@@ -61,5 +63,96 @@ async function getByStatus(statusId: number) {
 async function create(projectInfo: Omit<Project, 'id'|'createdAt'|'updatedAt'|'specifierId'|'dealerId'|'statusId'>) {
   return await prisma.project.create({
     data: projectInfo
+  });
+}
+
+async function updateStatus(projectId: number, statusId: number, employeeId: number) {
+  await prisma.project.update({
+    where:{
+      id: projectId
+    },
+    data:{
+      statusId,
+      assignedId: employeeId
+    }
+  });
+}
+
+async function getById (id: number) {
+  return await prisma.project.findUnique({
+    where: {
+      id
+    },
+    select:{
+      id: true,
+      code: true,
+      name: true,
+      information: true,
+      description: true,
+      branch:{},
+      address: true,
+      location:{},
+      totalCost: true,
+      salePrice: true,
+      status:{},
+      createdAt: true,
+      updatedAt: true,
+      specifier:{},
+      dealer:{},
+      assigned:{
+        select:{
+          id: true,
+          name: true,
+          email: true,
+          role:{},
+          area:{}
+        }
+      },
+      luminary:{
+        include:{
+          luminaryFilm:{
+            include:{
+              film:{}
+            }
+          },
+          luminaryProfile:{
+            include:{
+              profile:{}
+            }
+          },
+          luminaryLightSource:{
+            include:{
+              lightSource:{}
+            }
+          },
+          luminarypowerSupply:{
+            include:{
+              powerSupply:{}
+            }
+          },
+          luminaryAmplifier:{
+            include:{
+              amplifier:{}
+            }
+          },
+          luminaryAccessory:{
+            include:{
+              accessory:{}
+            }
+          },
+          luminaryAditionalMaterial:{
+            include:{
+              aditionalMaterial:{}
+            }
+          }
+        }
+      },
+      projectInstallation:{
+        include:{
+          installationCost:{}
+        }
+      }
+
+    }
   });
 }
