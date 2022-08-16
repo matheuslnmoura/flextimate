@@ -40,7 +40,7 @@ export default function SignIn() {
       await setEmployeeInfo(user);
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      navigate('/ae');
+      navigate('/projects');
     } catch (err) {
       const errorData = err.response.data;
       setErrorMessage(errorData);

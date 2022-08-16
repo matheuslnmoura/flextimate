@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import EmployeeContext from './contexts/employeeContext';
 
 import SignIn from './pages/SignIn/SignIn';
+import ProjectsHomePage from './pages/ProjectsHomePage/ProjectsHomePage';
 
 export default function App() {
   const [token, setToken] = useState('');
@@ -16,6 +17,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<SignIn />}/>
+          <Route path='/projects' element={<ProjectsHomePage />}/>
         </Routes>
       </BrowserRouter>
     </EmployeeContext.Provider>
