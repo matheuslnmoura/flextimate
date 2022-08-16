@@ -24,6 +24,7 @@ model Employee {
   roleId Int
   area Area @relation(fields: [areaId], references: [id])
   areaId Int
+  assigned Project[]
 
   @@map("employees")
 }
@@ -45,6 +46,7 @@ model Area {
 model Branch {
   id Int @id @default(autoincrement())
   name String
+  code String @default("BR")
   currency String
   measurement String
   employeeBranches EmployeeBranches[]
@@ -78,10 +80,10 @@ model Film {
   branchId Int
   rawCost Int
   manufacturedCost Int
-  salesPrice Int
-  dealerPrice Int
+  salesPrice Int?
+  dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryFilm LuminaryFilm[]
 
   @@map("films")
 }
@@ -91,12 +93,12 @@ model Profile {
   name String
   branch Branch @relation(fields: [branchId], references: [id])
   branchId Int
-  rawCost Int
-  manufacturedCost Int
-  salesPrice Int
-  dealerPrice Int
+  rawCostPerMeter Int
+  rawCostPerKg Int
+  salesPrice Int?
+  dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryProfile LuminaryProfile[]
 
   @@map("profiles")
 }
@@ -112,7 +114,7 @@ model LightSource {
   volts String
   lumensPerMeter Int
   wattsPerMeter Int
-  ampsPerMeter Int
+  mAmpsPerMeter Int
   protection String
   metersPerRoll Int
   rollCost Int
@@ -120,7 +122,7 @@ model LightSource {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryLightSource LuminaryLightSource[]
 
   @@map("light_sources")
 }
@@ -135,14 +137,15 @@ model PowerSupply {
   branchId Int
   volts String
   watts Int
-  amps Int
+  mAmps Int
   protection String
   cost Int
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
-  
+  luminarypowerSupply LuminaryPowerSupply[]
+
+
   @@map("power_supplies")
 }
 
@@ -155,15 +158,14 @@ model Amplifier {
   branch Branch @relation(fields: [branchId], references: [id])
   branchId Int
   volts String
-  watts Int
-  amps Int
+  mAmps Int
   protection String
   cost Int
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
-  
+  luminaryAmplifier LuminaryAmplifier[]
+
   @@map("amplifiers")
 }
 
@@ -179,7 +181,7 @@ model Accessory {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryAccessory LuminaryAccessory[]
   
   @@map("accessories")
 }
@@ -195,7 +197,7 @@ model AditionalMaterials {
   salesPrice Int?
   dealerPrice Int?
 
-  projectMaterial ProjectMaterial[]
+  luminaryAditionalMaterial LuminaryAditionalMaterial[]
   
   @@map("aditional_materials")
 }
@@ -228,14 +230,14 @@ model Project {
 
   address String
 
-  city City @relation(fields: [cityId], references: [id])
-  cityId Int
+  location Location @relation(fields: [locationId], references: [id])
+  locationId Int
 
   totalCost Int?
   salePrice Int?
 
   status Status @relation(fields: [statusId], references: [id])
-  statusId Int
+  statusId Int @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -246,47 +248,125 @@ model Project {
   dealer Dealer? @relation(fields: [dealerId], references: [id])  
   dealerId Int?
 
-  projectMaterial ProjectMaterial[]
+  assigned Employee @relation(fields: [assignedId], references: [id])
+  assignedId Int
+
+  luminary Luminary[]
+  projectInstallation ProjectInstallation[]
+
 
 
   @@map("projects")
 }
 
-model ProjectMaterial {
+model Luminary {
   id Int @id @default(autoincrement())
+
+  description String
+  quantity Int
 
   project Project @relation(fields: [projectId], references: [id])  
   projectId Int
 
+  luminaryFilm LuminaryFilm[]
+  luminaryProfile LuminaryProfile[]
+  luminaryLightSource LuminaryLightSource[]
+  luminarypowerSupply LuminaryPowerSupply[]
+  luminaryAmplifier LuminaryAmplifier[]
+  luminaryAccessory LuminaryAccessory[]
+  luminaryAditionalMaterial LuminaryAditionalMaterial[]
+
+}
+
+model LuminaryFilm {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
   film Film @relation(fields: [filmId], references: [id])  
   filmId Int
-  filmQuantity Int
+  filmQuantity Float
+
+  @@map("luminary_film")
+}
+
+model LuminaryProfile {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
 
   profile Profile @relation(fields: [profileId], references: [id])  
   profileId Int
-  profileQuantity Int
+  profileQuantity Float
+
+  @@map("luminary_profile")
+}
+
+model LuminaryLightSource {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
 
   lightSource LightSource @relation(fields: [lightSourceId], references: [id])  
   lightSourceId Int
-  lightSourceQuantity Int
+  lightSourceQuantity Float
+
+  @@map("luminary_light_source")
+}
+
+model LuminaryPowerSupply {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
 
   powerSupply PowerSupply @relation(fields: [powerSupplyId], references: [id])  
   powerSupplyId Int
   powerSupplyQuantity Int
 
+  @@map("luminary_power_supply")
+}
+
+model LuminaryAmplifier {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
   amplifier Amplifier @relation(fields: [amplifierId], references: [id])  
   amplifierId Int
   amplifierQuantity Int
+
+  @@map("luminary_amplifier")
+}
+
+model LuminaryAccessory {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
 
   accessory Accessory @relation(fields: [accessoryId], references: [id])  
   accessoryId Int
   accessoryQuantity Int
 
+  @@map("luminary_accessory")
+}
+
+model LuminaryAditionalMaterial {
+  id Int @id @default(autoincrement())
+
+  luminary Luminary @relation(fields: [luminaryId], references: [id])
+  luminaryId Int
+
   aditionalMaterial AditionalMaterials @relation(fields: [aditionalMaterialId], references: [id])  
   aditionalMaterialId Int
-  aditionalMaterialQuantity Int
+  aditionalMaterialQuantity Float
 
-  @@map("project_materials")
+  @@map("luminary_aditional_material")
 }
 
 model ProjectInstallation {
@@ -295,6 +375,9 @@ model ProjectInstallation {
   installationCost InstallationCosts @relation(fields: [installationCostId], references: [id])  
   installationCostId Int
   installationCostQuantity Int
+
+  project Project @relation(fields: [projectId], references: [id])  
+  projectId Int
 
   @@map("project_installation")
 }
@@ -335,38 +418,18 @@ model Dealer {
   @@map("dealers")  
 }
 
-model City {
+model Location {
   id Int @id @default(autoincrement())
-  name String
+  cityId Int
+  cityName String
+  stateId Int
+  stateCode String
+  stateName String
+  countryId Int
+  countryCode String
+  countryName String
 
   project Project[]
 
-  state State @relation(fields: [stateId], references: [id])
-  stateId Int
-    
-
-  @@map("cities") 
-}
-
-model State {
-  id Int @id @default(autoincrement())
-  name String
-
-  city City[]
-
-  country Country @relation(fields: [countryId], references: [id])
-  countryId Int
-    
-
-  @@map("states") 
-}
-
-model Country {
-  id Int @id @default(autoincrement())
-  name String
-
-  state State[]
-    
-
-  @@map("countries") 
+  @@map("locations") 
 }
