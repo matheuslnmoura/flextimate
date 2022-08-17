@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
@@ -23,6 +23,18 @@ export default function SignIn() {
   const [showPassword, setshowPassword] = useState(false); 
   const navigate = useNavigate();
 
+  useEffect(async ()=>{
+    const user = localStorage.getItem('user'); 
+    const token = localStorage.getItem('token');
+    if(user && token) {
+      await setToken(token);
+      await setEmployeeInfo(user);
+      navigate('/projects');
+    }
+
+  }, []);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -34,7 +46,6 @@ export default function SignIn() {
 
     try {
       const {data} = await axios.post( process.env.REACT_APP_API_URL + '/sign-in', body);
-      console.log(data);
       const {token, user} = data;
       await setToken(token);
       await setEmployeeInfo(user);

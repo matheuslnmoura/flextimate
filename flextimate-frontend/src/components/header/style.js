@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Header = styled.header`
   width: 100vw;
-  height: 101px;
+  height: 9.3vh;
   background: #151515;
 
   display: flex;
@@ -33,14 +33,51 @@ export const HeaderContainer = styled.div`
 
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+
+    position: relative;
+    top: 38%;
 
     gap: 30px;
   }
+
+  .right-menu .dropdown {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
   .right-menu .menu-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+  }
+
+ 
+`;
+
+
+export const Dropdown = styled.div`
+  width: 100%;
+  height: ${props=>props.height};
+  background: #202020;
+  position: relative;
+  z-index: 2;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  .dropdown-content {
+    display: ${props=>props.display};
+    opacity: ${props=>props.opacity};;
+    gap: 10px;
+    
+    transition: opacity ease 5s
+  }
+
+
+  .logout-icon, p{
+    margin-top: 10px;
   }
 `;

@@ -16,7 +16,15 @@ const projectRepository = {
 export default projectRepository;
 
 async function getAll() {
-  return await prisma.project.findMany({});
+  return await prisma.project.findMany({
+    include:{
+      branch:{},
+      location:{},
+      status:{},
+      specifier:{},
+      dealer:{}
+    }
+  });
 }
 
 async function getAllByCode() {
@@ -86,6 +94,7 @@ async function getById (id: number) {
     select:{
       id: true,
       code: true,
+      client: true,
       name: true,
       information: true,
       description: true,
@@ -94,6 +103,7 @@ async function getById (id: number) {
       location:{},
       totalCost: true,
       salePrice: true,
+      statusId:true,
       status:{},
       createdAt: true,
       updatedAt: true,
