@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {Collapse} from 'react-collapse';
 import GenericInput from '../inputs/genericInput/GenericInput';
 import MaterialsContext from '../../contexts/materialsContext';
@@ -84,13 +84,13 @@ export default function Filmsfield(props){
               <S.InputsRow>
                 <GenericInput label = {'Custo por m² - Bruto'} isCurrency = {true} type = {'text'} value = {rawCost ? rawCost : '-'} />
                 <GenericInput label = {'Custo por m² - Prod.'} isCurrency = {true} type = {'text'} value = {manufacturedCost ? manufacturedCost : '-'} />
-                <GenericInput label = {'Custo Total'} isCurrency = {true} type = {'text'} value = {(filmArea*manufacturedCost) + ((rollArea - filmArea)*rawCost)} />
+                <GenericInput label = {'Custo Total'} isCurrency = {true} type = {'text'} value = {(filmsObj.frontInfo.filmArea*manufacturedCost) + ((filmsObj.frontInfo.rollArea-filmsObj.frontInfo.filmArea)*rawCost)} />
 
               </S.InputsRow>
 
               <S.InputsRow>
                 <GenericInput label = {'Venda por m²'} disabled = {true} isCurrency = {true} type = {'text'} value = {salesPrice} />
-                <GenericInput label = {'Venda Total'} disabled = {true} isCurrency = {true} type = {'text'} value = {rollArea * salesPrice} />
+                <GenericInput label = {'Venda Total'} disabled = {true} isCurrency = {true} type = {'text'} value = {filmsObj.frontInfo.rollArea * salesPrice} />
               </S.InputsRow>
 
               <button onClick = {()=>{

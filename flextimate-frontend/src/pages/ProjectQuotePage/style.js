@@ -48,13 +48,11 @@ export const QuoteArea = styled.section `
   width: 100%;
   height: 500px;
   margin-top: 60px;
-  background: #ccc;
 `;
 
 export const MaterialsField = styled.div`
   width: 100%;
   height: 500px;
-  background: #f00;
   display: ${props=>props.display};
 `;
 
