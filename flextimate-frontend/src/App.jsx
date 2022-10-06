@@ -12,23 +12,23 @@ import ProjectPage from './pages/ProjectPage/ProjectPage';
 import ProjectQuotePage from './pages/ProjectQuotePage/ProjectQuotePage';
 
 export default function App() {
-  const [token, setToken] = useState('');
-  const [employeeInfo, setEmployeeInfo] = useState({});
-  const [projects, setProjects] = useState([]);
-  const [project, setProject] = useState({});
+	const [token, setToken] = useState('');
+	const [employeeInfo, setEmployeeInfo] = useState({});
+	const [projects, setProjects] = useState([]);
+	const [project, setProject] = useState({});
 
-  return(
-    <EmployeeContext.Provider value = {{token, setToken, employeeInfo, setEmployeeInfo}} >
-      <ProjectContext.Provider value = {{projects, setProjects, project, setProject}} >
-        <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<SignIn />}/>
-            <Route path='/projects' element={<ProjectsHomePage />}/>
-            <Route path='/project/:code' element={<ProjectPage />}/>
-            <Route path='/project/:code/quote' element={<ProjectQuotePage />}/>
-          </Routes>
-        </BrowserRouter>
-      </ProjectContext.Provider>
-    </EmployeeContext.Provider>
-  );
+	return(
+		<EmployeeContext.Provider value = {{token, setToken, employeeInfo, setEmployeeInfo}} >
+			<ProjectContext.Provider value = {{projects, setProjects, project, setProject}} >
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<SignIn />}/>
+						<Route path='/projects' element={<ProjectsHomePage />}/>
+						<Route path='/project/:code' element={<ProjectPage />}/>
+						<Route path='/project/:code/quote' element={<ProjectQuotePage />}/>
+					</Routes>
+				</BrowserRouter>
+			</ProjectContext.Provider>
+		</EmployeeContext.Provider>
+	);
 }

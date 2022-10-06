@@ -17,108 +17,109 @@ dotenv.config();
 
 
 export default function ProjectsHomePage() {
-  const navigate = useNavigate();
-  const {token} = useContext(EmployeeContext);
-  const {projects, setProjects, setProject} = useContext(ProjectContext);
+	const navigate = useNavigate();
+	const {token} = useContext(EmployeeContext);
+	const {projects, setProjects, setProject} = useContext(ProjectContext);
 
 
   
 
-  async function getProjects(queryString) {
-    try {
-      if(!queryString) {
-        queryString = '';
-      }
+	async function getProjects(queryString) {
+		try {
+			if(!queryString) {
+				queryString = '';
+			}
 
-      const config = {
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      };
-      const {data} = await axios.get( 
-        process.env.REACT_APP_API_URL + '/projects/get' + queryString,
-        config
-      );
+			const config = {
+				headers:{
+					Authorization: `Bearer ${token}`
+				}
+			};
+			const {data} = await axios.get( 
+				process.env.REACT_APP_API_URL + '/projects/get' + queryString,
+				config
+			);
 
-      setProjects(data);
+			setProjects(data);
       
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  }
-  useEffect(()=>{
-    if(!token) {
-      navigate('/');
-    }
+		} catch (error) {
+			console.log(error.response.data);
+		}
+	}
+	useEffect(()=>{
+		if(!token) {
+			navigate('/');
+		}
   
-    getProjects();
-  },[]);
+		getProjects();
+		// eslint-disable-next-line react-hooks/exhaustive-deps 
+	},[]);
 
-  return(
-    <>
-      <div className="page-wrapper">
-        <HeaderComponent />
-        <S.bodyWrapper>
-          <SideMenu />
-          <S.projectsArea>
-            <h1>Projetos</h1>
-            <div className="filter-icon-wrapper">
-              <BsFilter />
-              <p>Filtrar</p>
-            </div>
-            <S.ProjectDisplay>
-              <table>
+	return(
+		<>
+			<div className="page-wrapper">
+				<HeaderComponent />
+				<S.bodyWrapper>
+					<SideMenu />
+					<S.projectsArea>
+						<h1>Projetos</h1>
+						<div className="filter-icon-wrapper">
+							<BsFilter />
+							<p>Filtrar</p>
+						</div>
+						<S.ProjectDisplay>
+							<table>
 
-                <thead>
-                  <tr>
-                    <th>Código do Projeto</th>
-                    <th>Nome</th>
-                    <th>Unidade Operacional</th>
-                    <th>Status</th>
-                    <th>Criado em</th>
-                    <th>Especificador</th>
-                    <th>Revenda</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {projects === [] ?
-                    <div className="spinner-container">
-                      <ThreeDots color="#fff"  width={'100%'} />
-                    </div> : 
-                    projects.map((project, index)=>{
-                      const{ code, name, branch, status, createdAt, specifier, dealer} = project;
-                      const date = new Date(createdAt);
-                      const formatedDate = date.toLocaleString('pt-BR');
-                      return(
-                        <S.TableRow key={code + index} onClick={()=>{
-                          setProject(projects[index]);
-                          navigate(`/project/${code}`);
-                        }}>
-                          <td>{code ? code : '-'}</td>
-                          <td>{name ? name : '-'}</td>
-                          <td>{branch ? branch.name : '-'}</td>
-                          <td>{status ? status.name : '-'}</td>
-                          <td>{createdAt ? formatedDate: '-'}</td>
-                          <td>{specifier ? specifier.name : '-'}</td>
-                          <td>{dealer ? dealer.name : '-'}</td>
-                        </S.TableRow>
+								<thead>
+									<tr>
+										<th>Código do Projeto</th>
+										<th>Nome</th>
+										<th>Unidade Operacional</th>
+										<th>Status</th>
+										<th>Criado em</th>
+										<th>Especificador</th>
+										<th>Revenda</th>
+									</tr>
+								</thead>
+								<tbody>
+									{projects === [] ?
+										<div className="spinner-container">
+											<ThreeDots color="#fff"  width={'100%'} />
+										</div> : 
+										projects.map((project, index)=>{
+											const{ code, name, branch, status, createdAt, specifier, dealer} = project;
+											const date = new Date(createdAt);
+											const formatedDate = date.toLocaleString('pt-BR');
+											return(
+												<S.TableRow key={code + index} onClick={()=>{
+													setProject(projects[index]);
+													navigate(`/project/${code}`);
+												}}>
+													<td>{code ? code : '-'}</td>
+													<td>{name ? name : '-'}</td>
+													<td>{branch ? branch.name : '-'}</td>
+													<td>{status ? status.name : '-'}</td>
+													<td>{createdAt ? formatedDate: '-'}</td>
+													<td>{specifier ? specifier.name : '-'}</td>
+													<td>{dealer ? dealer.name : '-'}</td>
+												</S.TableRow>
 
-                      );
-                    })
+											);
+										})
 
-                  }
-                </tbody>
+									}
+								</tbody>
 
-              </table>
+							</table>
               
 
-            </S.ProjectDisplay>
+						</S.ProjectDisplay>
           
-          </S.projectsArea>
+					</S.projectsArea>
 
-        </S.bodyWrapper>
-      </div>
+				</S.bodyWrapper>
+			</div>
 
-    </>
-  );
+		</>
+	);
 }

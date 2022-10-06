@@ -73,7 +73,10 @@ async function checkMaterials(materials: MaterialsType, luminaryId: number) {
 
 async function checkInstallation(quoteInfo: QuoteInput, projectId: number) {
   const {services} = quoteInfo;
-  const {installation: installationItems} = services;
+  const {installation: installationItems} = services || {};
+  if(!installationItems) {
+    return []
+  }
   const registredInstallation = await Promise.all(installationItems.map( async (item) => {
     const installation = await installationCostRepository.getById(item.installationCostId);
     if(!installation) {
@@ -91,7 +94,10 @@ async function checkInstallation(quoteInfo: QuoteInput, projectId: number) {
 
 async function checkLogistics(quoteInfo: QuoteInput, projectId: number) {
   const {services} = quoteInfo;
-  const {logistics: logisticsItems} = services;
+  const {logistics: logisticsItems} = services || {};
+  if(!logisticsItems) {
+    return [];
+  }
   const registredLogistics = await Promise.all(logisticsItems.map( async (item) => {
     const logistic = await installationCostRepository.getById(item.installationCostId);
     if(!logistic) {

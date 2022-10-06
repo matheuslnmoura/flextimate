@@ -3,12 +3,12 @@ import * as S from './style.js';
 
 export default function SideMenu() {
 
-  return(
-    <>
-      <S.MenuWrapper>
+	return(
+		<>
+			<S.MenuWrapper>
         
-      </S.MenuWrapper>
+			</S.MenuWrapper>
       
-    </>
-  );
+		</>
+	);
 }
